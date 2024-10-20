@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Search from './components/Search';
+import Search from './api/components/Search';
 
 const App = () => {
   useEffect(() => {

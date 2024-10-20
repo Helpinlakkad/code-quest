@@ -5,8 +5,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 dotenv.config();
-const searchRoutes = require('./routes/searchRoutes');
-const emailRoutes = require('./routes/emailRoutes');
+const searchRoutes = require('./api/routes/searchRoutes');
+const emailRoutes = require('./api/routes/emailRoutes');
 
 const app = express();
 app.use(express.json());
