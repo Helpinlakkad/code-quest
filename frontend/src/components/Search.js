@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Search.module.css';
 
@@ -10,12 +10,26 @@ const Search = () => {
   const [filter, setFilter] = useState('all');
   const [sort, setSort] = useState('relevance');
 
+  // Function to initialize Weglot
+  useEffect(() => {
+    if (window.Weglot) {
+      window.Weglot.initialize({
+        api_key: "wg_d06f13c3d7995024e20d1673371917796", // Ensure this is your correct Weglot API key
+      });
+    }
+  }, []);
+
   const handleSearch = async () => {
     setHasSearched(true);
     try {
       const res = await axios.get(`http://localhost:5000/api/search?q=${query}`);
       console.log("Search API Response:", res.data);
       setResults(res.data || { stackOverflow: [], reddit: [] });
+
+      // After setting results, trigger Weglot refresh
+      if (window.Weglot && typeof window.Weglot.refresh === 'function') {
+        window.Weglot.refresh();
+      }
     } catch (error) {
       console.error('Error fetching search results:', error);
       alert('Failed to fetch search results. Please try again later.');
@@ -57,16 +71,16 @@ const Search = () => {
     return results.sort((a, b) => {
       switch (sort) {
         case 'date':
-          const dateA = a.creation_date || a.data.created_utc || 0;
-          const dateB = b.creation_date || b.data.created_utc || 0;
+          const dateA = a?.creation_date ?? a?.data?.created_utc ?? 0;
+          const dateB = b?.creation_date ?? b?.data?.created_utc ?? 0;
           return dateB - dateA;
         case 'upvotes':
-          const upvotesA = a.score || a.data.ups || 0;
-          const upvotesB = b.score || b.data.ups || 0;
+          const upvotesA = a?.score ?? a?.data?.ups ?? 0;
+          const upvotesB = b?.score ?? b?.data?.ups ?? 0;
           return upvotesB - upvotesA;
         case 'comments':
-          const commentsA = a.answer_count || a.data.num_comments || 0;
-          const commentsB = b.answer_count || b.data.num_comments || 0;
+          const commentsA = a?.answer_count ?? a?.data?.num_comments ?? 0;
+          const commentsB = b?.answer_count ?? b?.data?.num_comments ?? 0;
           return commentsB - commentsA;
         case 'relevance':
         default:
