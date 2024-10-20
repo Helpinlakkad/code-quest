@@ -14,7 +14,7 @@ const Search = () => {
   useEffect(() => {
     if (window.Weglot) {
       window.Weglot.initialize({
-        api_key: process.env.API_KEY, // Ensure this is your correct Weglot API key
+        api_key: process.env.REACT_APP_API_KEY,
       });
     }
   }, []);

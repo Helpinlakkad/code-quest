@@ -9,7 +9,7 @@ const App = () => {
     script.onload = () => {
       if (window.Weglot) {
         window.Weglot.initialize({
-          api_key: process.env.API_KEY
+          api_key: process.env.REACT_APP_API_KEY
         });
       }
     };
