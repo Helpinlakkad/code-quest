@@ -1,15 +1,17 @@
 {
     "version": 2,
     "builds": [
-        {
-            "src": "backend/api/*.js",
-            "use": "@vercel/node"
-        }
+      {
+        "src": "code-quest/backend/server.js",
+        "use": "@vercel/node"
+      },
+      {
+        "src": "code-quest/backend/api/**/*.js",
+        "use": "@vercel/node"
+      }
     ],
     "routes": [
-        {
-            "src": "/api/(.*)",
-            "dest": "/backend/api/$1"
-        }
+      { "src": "/api/(.*)", "dest": "/code-quest/backend/api/$1" }
     ]
-}
+  }
+  

@@ -17,7 +17,7 @@ app.use(bodyParser.json({ limit: '10mb' })); // Increase limit as needed
 
 mongoose.connect(process.env.MONGO_URI);
 
-app.use('/api/search', searchRoutes); // Search route
+app.use('/api', searchRoutes); // Search route
 app.use('/api/send-email', emailRoutes); // Email route
 
 const PORT = process.env.PORT || 5000;
