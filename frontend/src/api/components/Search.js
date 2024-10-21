@@ -9,8 +9,9 @@ const Search = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const [filter, setFilter] = useState('all');
   const [sort, setSort] = useState('relevance');
+  const [loading, setLoading] = useState(false); 
 
-  // Function to initialize Weglot
+  // initialize Weglot
   useEffect(() => {
     if (window.Weglot) {
       window.Weglot.initialize({
@@ -21,6 +22,7 @@ const Search = () => {
 
   const handleSearch = async () => {
     setHasSearched(true);
+    setLoading(true); 
     try {
       const res = await axios.get(`http://localhost:5000/api/search/query?q=${query}`);
       console.log("Search API Response:", res.data);
@@ -33,6 +35,8 @@ const Search = () => {
     } catch (error) {
       console.error('Error fetching search results:', error);
       alert('Failed to fetch search results. Please try again later.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -135,60 +139,64 @@ const Search = () => {
         </div>
       </div>
 
-      {hasSearched && (sortedResults.length > 0) ? (
-        <div>
-          {stackOverflowResults.length > 0 && (
-            <>
-              <h2>Stack Overflow Results</h2>
-              <ul className="resultsList">
-                {stackOverflowResults.map(result => (
-                  <li key={result.question_id} className="resultItem">
-                    <a href={result.link} target="_blank" rel="noopener noreferrer">
-                      <strong>{result.title}</strong>
-                    </a>
-                    <p>{`Asked by: ${result.owner.display_name}`}</p>
-                    <p>{`Score: ${result.score || 0}`}</p>
-                    <p>{`Comments: ${result.answer_count || 0}`}</p>
-                    <p>{`Created on: ${formatDate(result.creation_date)}`}</p>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
+      {loading ? ( // Show loading message
+        <p className="loadingMessage">Searching for results...</p>
+      ) : hasSearched ? (
+        sortedResults.length > 0 ? (
+          <div>
+            {stackOverflowResults.length > 0 && (
+              <>
+                <h2>Stack Overflow Results</h2>
+                <ul className="resultsList">
+                  {stackOverflowResults.map(result => (
+                    <li key={result.question_id} className="resultItem">
+                      <a href={result.link} target="_blank" rel="noopener noreferrer">
+                        <strong>{result.title}</strong>
+                      </a>
+                      <p>{`Asked by: ${result.owner.display_name}`}</p>
+                      <p>{`Score: ${result.score || 0}`}</p>
+                      <p>{`Comments: ${result.answer_count || 0}`}</p>
+                      <p>{`Created on: ${formatDate(result.creation_date)}`}</p>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
 
-          {redditResults.length > 0 && (
-            <>
-              <h2>Reddit Results</h2>
-              <ul className="resultsList">
-                {redditResults.map(result => (
-                  <li key={result.data.id} className="resultItem">
-                    <a href={result.data.url} target="_blank" rel="noopener noreferrer">
-                      <strong>{result.data.title}</strong>
-                    </a>
-                    <p>{`Subreddit: ${result.data.subreddit}`}</p>
-                    <p>{`Upvotes: ${result.data.ups || 0}`}</p>
-                    <p>{`Comments: ${result.data.num_comments || 0}`}</p>
-                    <p>{`Created on: ${formatDate(result.data.created_utc)}`}</p>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
+            {redditResults.length > 0 && (
+              <>
+                <h2>Reddit Results</h2>
+                <ul className="resultsList">
+                  {redditResults.map(result => (
+                    <li key={result.data.id} className="resultItem">
+                      <a href={result.data.url} target="_blank" rel="noopener noreferrer">
+                        <strong>{result.data.title}</strong>
+                      </a>
+                      <p>{`Subreddit: ${result.data.subreddit}`}</p>
+                      <p>{`Upvotes: ${result.data.ups || 0}`}</p>
+                      <p>{`Comments: ${result.data.num_comments || 0}`}</p>
+                      <p>{`Created on: ${formatDate(result.data.created_utc)}`}</p>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
 
-          <div className="emailContainer">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="emailInput"
-            />
-            <button onClick={handleEmail} className="emailButton">Send Email</button>
+            <div className="emailContainer">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="emailInput"
+              />
+              <button onClick={handleEmail} className="emailButton">Send Email</button>
+            </div>
           </div>
-        </div>
-      ) : (
-        hasSearched && <p>No results found.</p>
-      )}
+        ) : (
+          <p className="noResultsMessage">Sorry, no results found. Please enter a correct question.</p> // User-friendly message for no results
+        )
+      ) : null}
     </div>
   );
 };

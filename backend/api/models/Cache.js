@@ -1,4 +1,3 @@
-// backend/models/Cache.js
 const mongoose = require('mongoose');
 
 const CacheSchema = new mongoose.Schema({

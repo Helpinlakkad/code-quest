@@ -1,6 +1,5 @@
-// backend/controllers/searchController.js
 const axios = require('axios');
-const Cache = require('../models/Cache'); // Cache model
+const Cache = require('../models/Cache'); 
 
 exports.searchQuery = async (req, res) => {
   const query = req.query.q;
@@ -26,12 +25,12 @@ exports.searchQuery = async (req, res) => {
       reddit: reddit.data.data.children || []
     };
 
-    // Save the new result to the cache
+    // Save
     const newCache = new Cache({ query, results });
     await newCache.save();
     console.log(`Caching results for query: "${query}"`);
 
-    // Send the results to the client
+    // Send the results
     res.json(results);
 
   } catch (error) {

@@ -1,4 +1,3 @@
-// backend/controllers/emailController.js
 const nodemailer = require('nodemailer');
 
 exports.sendEmail = async (req, res) => {
