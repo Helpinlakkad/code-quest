@@ -22,7 +22,7 @@ const Search = () => {
   const handleSearch = async () => {
     setHasSearched(true);
     try {
-      const res = await axios.get(`http://localhost:5000/api/search?q=${query}`);
+      const res = await axios.get(`http://localhost:5000/api/search/query?q=${query}`);
       console.log("Search API Response:", res.data);
       setResults(res.data || { stackOverflow: [], reddit: [] });
 

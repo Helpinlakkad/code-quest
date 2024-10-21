@@ -3,13 +3,11 @@ const express = require('express');
 const { searchQuery } = require('../controllers/searchController');
 const router = express.Router();
 
-
+// Define the search route directly
 router.get('/', (req, res) => {
-    // Your search functionality here
-    res.json({ message: 'Search API is working' });
-  });
+  res.json({ message: 'Search API is working' });
+});
 
-
-router.get('/search', searchQuery);
+router.get('/query', searchQuery); // Changed from /search to /query
 
 module.exports = router;

@@ -6,12 +6,13 @@
         "use": "@vercel/node"
       },
       {
-        "src": "code-quest/backend/api/**/*.js",
+        "src": "code-quest/backend/api/routes/*.js",
         "use": "@vercel/node"
       }
     ],
     "routes": [
-      { "src": "/api/(.*)", "dest": "/code-quest/backend/api/$1" }
+      { "src": "/api/search/(.*)", "dest": "/code-quest/backend/server.js" },
+      { "src": "/api/send-email/(.*)", "dest": "/code-quest/backend/server.js" }
     ]
   }
   
